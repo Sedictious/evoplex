@@ -362,7 +362,7 @@ void BaseGraphGL::mouseReleaseEvent(QMouseEvent *e)
 
     if (e->button() == Qt::LeftButton) {
         Node prevSelection = selectedNode();
-        const Node& node = selectNode(e->localPos(), m_bCenter->isChecked(), true);
+        const Node& node = selectNode(e->localPos(), m_bCenter->isChecked());
         const Node& nodeCur = selectNode(m_posEntered, m_bCenter->isChecked());
         if (!nodeCur.isNull() && !prevSelection.isNull() && nodeCur != prevSelection && e->modifiers().testFlag(Qt::ControlModifier)) {
             updateEdgesInspector(nodeCur, prevSelection);
