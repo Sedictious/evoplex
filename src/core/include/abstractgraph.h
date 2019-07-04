@@ -34,7 +34,7 @@ namespace evoplex {
  */
 class AbstractGraphInterface : public AbstractPlugin
 {
-    friend class Trial;
+
 public:
     //! Provide a default destructor to keep compilers happy.
     virtual ~AbstractGraphInterface() = default;

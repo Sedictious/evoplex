@@ -1,18 +1,18 @@
 /* Evoplex <https://evoplex.org>
-* Copyright (C) 2016-present - Marcos Cardinot <marcos@cardinot.net>
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+ * Copyright (C) 2016-present - Marcos Cardinot <marcos@cardinot.net>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 #include "abstractgraph.h"
 #include "constants.h"
@@ -25,7 +25,7 @@ namespace evoplex {
 
 AbstractGraph::AbstractGraph()
     : m_lastNodeId(-1),
-    m_lastEdgeId(-1)
+      m_lastEdgeId(-1)
 {
 }
 
@@ -37,7 +37,7 @@ bool AbstractGraph::setup(const QString& id, const GraphType& type, AttrsGenerat
     m_id = id;
     m_type = type;
     m_nodes = nodes;
-    m_numNodesDist = std::uniform_int_distribution<int>(0, numNodes() - 1);
+    m_numNodesDist = std::uniform_int_distribution<int>(0, numNodes()-1);
     m_lastNodeId = static_cast<int>(m_nodes.size());
     m_edgeAttrsGen = std::move(edgeGen);
     return AbstractPlugin::setup(id, type, attrs);
@@ -83,11 +83,10 @@ Node AbstractGraph::addNode(Attributes attr, float x, float y)
     BaseNode::constructor_key k;
     if (isDirected()) {
         node.m_ptr = std::make_shared<DNode>(k, m_lastNodeId, attr, x, y);
-    }
-    else {
+    } else {
         node.m_ptr = std::make_shared<UNode>(k, m_lastNodeId, attr, x, y);
     }
-    m_nodes.insert({ m_lastNodeId, node });
+    m_nodes.insert({m_lastNodeId, node});
     m_numNodesDist = std::uniform_int_distribution<int>(0, numNodes() - 1);
     return node;
 }
@@ -125,8 +124,7 @@ void AbstractGraph::removeAllEdges(const Node& node)
             m_edges.erase(p.first);
         }
         node.m_ptr->clearOutEdges();
-    }
-    else if (isDirected()) {
+    } else if (isDirected()) {
         for (auto const& p : node.outEdges()) {
             p.second.neighbour().m_ptr->removeInEdge(p.first);
             m_edges.erase(p.first);
@@ -137,8 +135,7 @@ void AbstractGraph::removeAllEdges(const Node& node)
         }
         node.m_ptr->clearInEdges();
         node.m_ptr->clearOutEdges();
-    }
-    else {
+    } else {
         qFatal("invalid type!");
     }
 }
@@ -148,7 +145,7 @@ void AbstractGraph::removeNode(const Node& node)
     removeAllEdges(node);
     QMutexLocker locker(&m_mutex);
     m_nodes.erase(node.id());
-    int sz = m_nodes.empty() ? 0 : numNodes() - 1;
+    int sz = m_nodes.empty() ? 0 : numNodes()-1;
     m_numNodesDist = std::uniform_int_distribution<int>(0, sz);
 }
 
@@ -157,7 +154,7 @@ Nodes::iterator AbstractGraph::removeNode(Nodes::iterator it)
     removeAllEdges(it->second);
     QMutexLocker locker(&m_mutex);
     it = m_nodes.erase(it);
-    int sz = m_nodes.empty() ? 0 : numNodes() - 1;
+    int sz = m_nodes.empty() ? 0 : numNodes()-1;
     m_numNodesDist = std::uniform_int_distribution<int>(0, sz);
     return it;
 }

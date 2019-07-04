@@ -33,20 +33,20 @@ class Trial;
  */
 class AbstractPlugin
 {
-    friend class AbstractGraph;
     friend class Trial;
+    friend class AbstractGraph;
 
 public:
-    //! @addtogroup PluginsAPI
-    //! @{
+//! @addtogroup PluginsAPI
+//! @{
 
-        /**
-         * @brief Initializes the plugin.
-         * This method is called when the plugin is created and
-         * is mainly used to validate inputs and set the environment.
-         * The default implementation does nothing.
-         * @return true if successful
-         */
+    /**
+     * @brief Initializes the plugin.
+     * This method is called when the plugin is created and
+     * is mainly used to validate inputs and set the environment.
+     * The default implementation does nothing.
+     * @return true if successful
+     */
     virtual bool init();
 
     /**
@@ -83,7 +83,7 @@ public:
     //! @copydoc attrExists(const char*) const
     inline bool attrExists(const QString& name) const;
 
-    /**@}*/
+/**@}*/
 
 protected:
     //! constructor
