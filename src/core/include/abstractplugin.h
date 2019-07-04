@@ -20,7 +20,7 @@
 #include <QString>
 
 #include "attributes.h"
-#include "prg.h"
+#include "enum.h"
 #include "value.h"
 
 namespace evoplex {
@@ -33,33 +33,21 @@ class Trial;
  */
 class AbstractPlugin
 {
-    friend class Trial;
     friend class AbstractGraph;
+    friend class Trial;
 
 public:
-//! @addtogroup PluginsAPI
-//! @{
+    //! @addtogroup PluginsAPI
+    //! @{
 
-    /**
-     * @brief Initializes the plugin.
-     * This method is called when the plugin is created and
-     * is mainly used to validate inputs and set the environment.
-     * The default implementation does nothing.
-     * @return true if successful
-     */
+        /**
+         * @brief Initializes the plugin.
+         * This method is called when the plugin is created and
+         * is mainly used to validate inputs and set the environment.
+         * The default implementation does nothing.
+         * @return true if successful
+         */
     virtual bool init();
-
-    /**
-     * @brief pseudo-random generator pointer.
-     * This PRG is built with the Trial seed.
-     */
-    PRG* prg() const;
-
-    /**
-     * @brief prg() alias
-     * @see prg()
-     */
-    inline PRG* rand() const;
 
     /**
      * @brief Gets the plugin's attributes.
@@ -84,7 +72,7 @@ public:
      * @param defaultValue A Value to be returned if \p name is not present.
      * @return The attribute's value.
      */
-    inline Value attr(const QString& name, Value defaultValue=Value()) const;
+    inline Value attr(const QString& name, Value defaultValue = Value()) const;
 
     /**
      * @brief Checks if the plugin's attribute \p name exists.
@@ -95,19 +83,20 @@ public:
     //! @copydoc attrExists(const char*) const
     inline bool attrExists(const QString& name) const;
 
-/**@}*/
+    /**@}*/
 
 protected:
-    Trial* m_trial;
-
     //! constructor
     AbstractPlugin() = default;
     //! destructor
     ~AbstractPlugin() = default;
+    Trial* m_trial;
 
 private:
     const Attributes* m_attrs;
-
+    const GraphType* m_type;
+    const QString* m_id;
+    bool setup(const QString& id, const GraphType& type, const Attributes& attrs);
     bool setup(Trial& trial, const Attributes& attrs);
 };
 
@@ -115,26 +104,35 @@ private:
    AbstractPlugin: Inline member functions
  ************************************************************************/
 
-inline PRG* AbstractPlugin::rand() const
-{ return prg(); }
-
 inline const Attributes* AbstractPlugin::attrs() const
-{ return m_attrs; }
+{
+    return m_attrs;
+}
 
 inline const QString& AbstractPlugin::attrName(int attrId) const
-{ return m_attrs->name(attrId); }
+{
+    return m_attrs->name(attrId);
+}
 
 inline const Value& AbstractPlugin::attr(int attrId) const
-{ return m_attrs->value(attrId);  }
+{
+    return m_attrs->value(attrId);
+}
 
 inline Value AbstractPlugin::attr(const QString& name, Value defaultValue) const
-{ return m_attrs->value(name, defaultValue); }
+{
+    return m_attrs->value(name, defaultValue);
+}
 
 inline bool AbstractPlugin::attrExists(const char* name) const
-{ return m_attrs->contains(name); }
+{
+    return m_attrs->contains(name);
+}
 
 inline bool AbstractPlugin::attrExists(const QString& name) const
-{ return m_attrs->contains(name); }
+{
+    return m_attrs->contains(name);
+}
 
 } // evoplex
 #endif // ABSTRACT_PLUGIN_H

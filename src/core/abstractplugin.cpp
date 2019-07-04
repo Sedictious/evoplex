@@ -24,6 +24,14 @@ bool AbstractPlugin::init()
     return true;
 }
 
+bool AbstractPlugin::setup(const QString& id, const GraphType& type, const Attributes& attrs)
+{
+    m_id = &id;
+    m_type = &type;
+    m_attrs = &attrs;
+    return init();
+}
+
 bool AbstractPlugin::setup(Trial& trial, const Attributes& attrs)
 {
     m_trial = &trial;
@@ -31,9 +39,5 @@ bool AbstractPlugin::setup(Trial& trial, const Attributes& attrs)
     return init();
 }
 
-PRG* AbstractPlugin::prg() const
-{
-    return m_trial->prg();
-}
 
 } // evoplex

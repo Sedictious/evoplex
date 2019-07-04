@@ -34,6 +34,7 @@ namespace evoplex {
  */
 class AbstractGraphInterface : public AbstractPlugin
 {
+    friend class Trial;
 public:
     //! Provide a default destructor to keep compilers happy.
     virtual ~AbstractGraphInterface() = default;
@@ -54,7 +55,6 @@ public:
 class AbstractGraph : public AbstractGraphInterface
 {
     friend class Trial;
-
 public:
 //! @addtogroup GraphAPI
 //! @{
@@ -207,6 +207,8 @@ protected:
     AttrsGeneratorPtr m_edgeAttrsGen;
     Edges m_edges;
     Nodes m_nodes;
+    QString m_id;
+    GraphType m_type;
 
     //! constructor
     AbstractGraph();
@@ -217,9 +219,10 @@ private:
     QMutex m_mutex;
 
     std::uniform_int_distribution<int> m_numNodesDist;
-
+    bool setup(const QString& id, const GraphType& type, AttrsGeneratorPtr edgeGen,
+        const Attributes& attrs, Nodes& nodes);
     bool setup(Trial& trial, AttrsGeneratorPtr edgeGen,
-               const Attributes& attrs, Nodes& nodes);
+        const Attributes& attrs, Nodes& nodes);
 };
 
 
