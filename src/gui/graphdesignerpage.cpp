@@ -38,6 +38,7 @@ GraphDesignerPage::GraphDesignerPage(MainGUI* mainGUI)
 
     m_ui->labelGraphDesigner->setFont(FontStyles::h4());
 
+    m_curGraphId = 0;
     connect(m_ui->bNewGraph, SIGNAL(pressed()), SLOT(slotNewGraph()));
 }
 
@@ -50,6 +51,7 @@ void GraphDesignerPage::slotNewGraph()
 {
     m_curGraphDesigner = new GraphDesigner(m_mainGUI->mainApp(), this);
     m_curGraphDesigner->setVisible(true);
+    ++m_curGraphId;
 }
 
 void GraphDesignerPage::slotCloseGraphDesigner()

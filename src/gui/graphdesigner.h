@@ -27,6 +27,7 @@
 #include <QHash>
 #include <QTableWidget>
 
+#include "core/graphinputs.h"
 #include "core/project.h"
 
 #include "external/qt-material-widgets/qtmaterialiconbutton.h"
@@ -55,12 +56,13 @@ private slots:
     void slotNodeTableUpdate(int val);
     void slotEdgeTableUpdate(int val);
     void slotAddGraphDesigner();
+    void slotEdgesWidget();
+    void slotNodesWidget();
 
 private:
     MainApp * m_mainApp;
     ProjectPtr m_project;
     PluginKey m_selectedGraphKey;
-    PluginKey m_selectedModelKey;
 
     Ui_GraphDesigner* m_ui;
     QTreeWidgetItem* m_treeItemGraphs;
@@ -69,7 +71,8 @@ private:
     AttrWidget* m_enableOutputs;
     int m_graphTypeIdx;  // position of the graphtype combobox in the graph tree
     int m_edgesAttrsIdx; // position of the edgesAttrs field in the graph tree
-    
+    int m_graphDesignerId;
+
     QtMaterialIconButton* m_bAdd;
     QtMaterialIconButton* m_bRemove;
     
@@ -81,6 +84,14 @@ QWidget* customWidget, int i);
 
     QTableWidget* m_nodeAttrTable;
     QTableWidget* m_edgeAttrTable;
+
+    AttributesScope m_nodeAttrs;
+    AttributesScope m_edgeAttrs;
+
+    std::unique_ptr<GraphInputs> readInputs(const int graphId, QString& error) const;
+
+    //QList<AttributesScope> 
+    void parseAttributes(QString& error);
 
     void pluginSelected(QTreeWidgetItem* itemRoot, const PluginKey& key);
     void addPluginAttrs(QTreeWidgetItem* tree, const Plugin* plugin);

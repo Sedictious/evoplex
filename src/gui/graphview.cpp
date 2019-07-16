@@ -43,7 +43,6 @@ GraphView::GraphView(AbstractGraph* abstractGraph, AttributesScope nodeAttrsScop
         [this](bool b) { m_showNodes = b; updateCache(); });
     connect(m_ui->bShowEdges, &QPushButton::clicked,
         [this](bool b) { m_showEdges = b; updateCache(); });
-
     updateNodePen();
     m_origin += m_origin; // double margin
 }

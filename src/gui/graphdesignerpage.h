@@ -39,6 +39,8 @@ class GraphDesignerPage : public QWidget
 
 public:
     explicit GraphDesignerPage(MainGUI* mainGUI);
+    inline const int currentGraphId() const;
+
     ~GraphDesignerPage();
 
 private:
@@ -47,11 +49,15 @@ private:
     MainGUI* m_mainGUI;
     QMainWindow* m_innerWindow;
     GraphDesigner* m_curGraphDesigner;
+    int m_curGraphId;
 
 private slots:
     void slotNewGraph();
     void slotCloseGraphDesigner();
 };
+
+inline const int GraphDesignerPage::currentGraphId()  const
+{ return m_curGraphId; }
 
 }
 
