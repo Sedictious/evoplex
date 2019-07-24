@@ -61,7 +61,6 @@ private:
     GraphType m_graphType;
 
     QComboBox* m_cbgraphType;
-
     void parseAttrs(QString& error);
 
 private slots:

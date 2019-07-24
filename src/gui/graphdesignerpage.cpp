@@ -22,6 +22,7 @@
 #include <QToolBar>
 #include <QToolButton>
 #include <QHBoxLayout>
+#include <QSettings>
 
 #include "fontstyles.h"
 #include "graphdesignerpage.h"
@@ -36,7 +37,7 @@ GraphDesignerPage::GraphDesignerPage(MainGUI* mainGUI)
     m_mainGUI(mainGUI),
     m_innerWindow(new QMainWindow()),
     m_ui(new Ui_GraphDesignerPage),
-    m_graphDesigner(new GraphDesigner(mainGUI->mainApp(), this))
+    m_graphDesigner(new GraphDesigner(mainGUI, this))
 {
     setWindowTitle("Graph Designer Page");
     setObjectName("GraphDesignerPage");
@@ -77,12 +78,15 @@ void GraphDesignerPage::changedAttrsScope(const AttrsType type, AttributesScope 
     }
 }
 
-void GraphDesignerPage::changedGraphAttrs(const int numNodes, GraphType graphType, QStringList& graphAttrHeader, QStringList& graphAttrValues)
+void GraphDesignerPage::changedGraphAttrs(const int numNodes, PluginKey selectedGraphKey, GraphType graphType, QStringList& graphAttrHeader, QStringList& graphAttrValues)
 {
     m_numNodes = numNodes;
     m_graphAttrHeader = graphAttrHeader;
     m_graphAttrValues = graphAttrValues;
     m_graphType = graphType;
+    m_selectedGraphKey = selectedGraphKey;
+
+    m_graphDesigner->slotUpdateGraph();
 }
 
 }

@@ -61,7 +61,6 @@ private:
     explicit GraphInputs(const GraphPlugin* g, Attributes* general, Attributes* graph, const std::vector<Cache*>& caches);
 
     const GraphPlugin* m_graphPlugin;
-
     Attributes* m_generalAttrs;
     Attributes* m_graphAttrs;
     Attributes* m_modelAttrs;

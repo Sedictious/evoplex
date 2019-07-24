@@ -57,6 +57,7 @@ public:
 class AbstractGraph : public AbstractGraphInterface
 {
     friend class Trial;
+    friend class GraphDesigner;
 
 public:
 //! @addtogroup GraphAPI

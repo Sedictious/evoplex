@@ -61,6 +61,11 @@ GraphGenDlg::GraphGenDlg(GraphDesignerPage* parent, MainGUI* mainGUI)
     connect(m_ui->cancel, SIGNAL(clicked()), SLOT(close()));
 };
 
+GraphGenDlg::~GraphGenDlg()
+{
+    delete m_ui;
+}
+
 void GraphGenDlg::parseAttrs(QString& error)
 {
     if (m_selectedGraphKey == PluginKey()) {
@@ -92,7 +97,7 @@ void GraphGenDlg::slotSaveGraphGen()
         return;
     }
 
-    m_graphPage->changedGraphAttrs(m_numNodes, m_graphType, m_attrHeader, m_attrValues);
+    m_graphPage->changedGraphAttrs(m_numNodes, m_selectedGraphKey, m_graphType, m_attrHeader, m_attrValues);
    
     close();
 }
@@ -102,10 +107,6 @@ void GraphGenDlg::slotGraphSelected(int grId)
     // Clear list widget entries
     while (m_ui->attrForm->count() > 0) {
         m_ui->attrForm->removeRow(0);
-        //auto item = m_ui->attrForm->takeAt(0);
-        //auto widget = item->widget();
-        //delete widget;
-        //delete item;
     }
 
     if (grId == 0) {
@@ -139,11 +140,5 @@ void GraphGenDlg::slotGraphSelected(int grId)
         ++it;
     }
 }
-
-GraphGenDlg::~GraphGenDlg()
-{
-    delete m_ui;
-}
-
 
 }

@@ -99,7 +99,7 @@ void GraphAttrsDlg::slotAttrSaved() {
     parseAttributes(errstrng);
 
     if (!errstrng.isEmpty()) {
-        QMessageBox::warning(this, "Attributes Parser", "Error when parsing attributes: " + errstrng);
+        QMessageBox::warning(this, "Attributes Parser", "Error when parsing attributes:\n" + errstrng);
         return;
     }
 

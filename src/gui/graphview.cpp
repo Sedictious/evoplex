@@ -206,6 +206,7 @@ void GraphView::drawNodes(QPainter& painter, double nodeRadius) const
     if (!m_showNodes || m_nodeAttr < 0 || !m_nodeCMap) {
         return;
     }
+
     painter.save();
     painter.setPen(m_nodePen);
     for (const Star& star : m_cache) {
