@@ -25,19 +25,21 @@
 #include <QStringList>
 
 #include "core/include/enum.h"
+#include "core/mainapp.h"
+#include "core/graphinputs.h"
 
 #include "maingui.h"
 #include "abstractgraph.h"
 #include "attributerange.h"
-
-#include "core/mainapp.h"
-#include "core/graphinputs.h"
+#include "fullinspector.h"
 
 class Ui_GraphDesignerPage;
 
 namespace evoplex {
 
 class GraphDesigner;
+class FullInspector;
+
 enum class  AttrsType;
 
 class GraphDesignerPage : public QMainWindow
@@ -69,6 +71,7 @@ private:
     QMainWindow* m_innerWindow;
     Ui_GraphDesignerPage * m_ui;
     GraphDesigner* m_graphDesigner;
+    FullInspector* m_inspector;
 
     PluginKey m_selectedGraphKey;
     AttributesScope m_edgeAttrScope;
