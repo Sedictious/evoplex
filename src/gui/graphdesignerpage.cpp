@@ -31,7 +31,6 @@
 #include "fontstyles.h"
 #include "graphattrsdlg.h"
 #include "graphdesignerpage.h"
-#include "graphdesigner.h"
 #include "graphgendlg.h"
 #include "ui_graphdesignerpage.h"
 
@@ -43,8 +42,8 @@ GraphDesignerPage::GraphDesignerPage(MainGUI* mainGUI)
     m_mainGUI(mainGUI),
     m_innerWindow(new QMainWindow()),
     m_ui(new Ui_GraphDesignerPage),
-    m_graphDesigner(new GraphDesigner(mainGUI, this)),
-    m_inspector(new FullInspector(m_graphDesigner))
+    m_inspector(new FullInspector(this)),
+    m_graphDesigner(new GraphDesigner(mainGUI, this))
 {
     setWindowTitle("Graph Designer Page");
     setObjectName("GraphDesignerPage");
@@ -76,7 +75,8 @@ GraphDesignerPage::GraphDesignerPage(MainGUI* mainGUI)
     setCentralWidget(m_graphDesigner);
 
     addDockWidget(Qt::RightDockWidgetArea, m_inspector);
-    m_inspector->hide();
+
+    m_inspector->show();
 
 }
 

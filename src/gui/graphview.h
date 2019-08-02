@@ -22,6 +22,7 @@
 #define GRAPHVIEW_H
 
 #include "basegraphgl.h"
+#include "fullinspector.h"
 
 namespace evoplex {
 
@@ -54,6 +55,7 @@ private:
     int m_edgeAttr;
     const int m_maxSelectedNodes;
 
+    FullInspector* m_inspector;
     ColorMap* m_edgeCMap;
     qreal m_edgeScale;
 

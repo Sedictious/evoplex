@@ -347,6 +347,7 @@ void BaseGraphGL::mouseReleaseEvent(QMouseEvent *e)
         return;
     }
 
+    //TODO: Refactor this to minimize code duplication after all the tools have been added
     if (m_curMode == SelectionMode::Default) {
         if (e->button() == Qt::LeftButton) {
             Node prevSelection = selectedNode();
@@ -379,6 +380,37 @@ void BaseGraphGL::mouseReleaseEvent(QMouseEvent *e)
             }
         }
     }
+    if (m_curMode == SelectionMode::Select) {
+        if (e->button() == Qt::LeftButton) {
+            Node prevSelection = selectedNode();
+            const Node& node = selectNode(e->localPos(), m_bCenter->isChecked());
+            const Node& nodeCur = selectNode(m_posEntered, m_bCenter->isChecked());
+            if (!nodeCur.isNull() && !e->modifiers().testFlag(Qt::ControlModifier)) {
+                updateFullInspector();
+                m_bCenter->isChecked() ? updateCache() : update();
+            } else {
+                m_origin += (e->pos() - m_posEntered);
+                clearSelection();
+                updateCache();
+            }
+        }
+        else if (e->button() == Qt::RightButton && m_nodeAttr >= 0 && !m_isReadOnly) {
+            Node node = selectNode(e->localPos(), false);
+            if (!node.isNull()) {
+                const QString& attrName = node.attrs().name(m_nodeAttr);
+                auto attrRange = m_nodeAttrsScope.value(attrName);
+                node.setAttr(m_nodeAttr, attrRange->next(node.attr(m_nodeAttr)));
+                clearSelection();
+                emit(updateWidgets(true));
+                updateCache();
+            }
+        }
+    }
+}
+
+void BaseGraphGL::updateFullInspector()
+{
+    //m_inspector->show();
 }
 
 void BaseGraphGL::keyPressEvent(QKeyEvent* e)

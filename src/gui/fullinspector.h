@@ -22,6 +22,7 @@
 #define FULL_INSPECTOR_H
 
 #include "graphdesigner.h"
+#include "graphdesignerpage.h"
 
 class Ui_FullInspector;
 
@@ -32,11 +33,11 @@ class FullInspector : public QDockWidget
     Q_OBJECT
     
 public:
-    explicit FullInspector(GraphDesigner* parent);
+    explicit FullInspector(GraphDesignerPage* parent);
     ~FullInspector();
 
 private:
-    GraphDesigner* m_parent;
+    GraphDesignerPage* m_parent;
     Ui_FullInspector* m_ui;
 };
 

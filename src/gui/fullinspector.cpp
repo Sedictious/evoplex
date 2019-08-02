@@ -23,7 +23,7 @@
 
 namespace evoplex {
 
-FullInspector::FullInspector(GraphDesigner* parent)
+FullInspector::FullInspector(GraphDesignerPage* parent)
     : QDockWidget(parent),
     m_ui(new Ui_FullInspector),
     m_parent(parent)
