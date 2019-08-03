@@ -76,7 +76,7 @@ GraphDesignerPage::GraphDesignerPage(MainGUI* mainGUI)
 
     addDockWidget(Qt::RightDockWidgetArea, m_inspector);
 
-    m_inspector->show();
+    m_inspector->hide();
 
 }
 

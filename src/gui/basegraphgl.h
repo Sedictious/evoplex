@@ -21,6 +21,7 @@
 #ifndef BASEGRAPHGL_H
 #define BASEGRAPHGL_H
 
+#include <map>
 #include <memory>
 #include <vector>
 
@@ -83,6 +84,7 @@ public:
     void paint(QPaintDevice* device, bool paintBackground) const;
 
     inline int currStep() const { return m_currStep; }
+    std::map<int, Node> m_selectedNodes; //TODO: This shouldn't be public
     inline void setInspector(FullInspector* inspector) { m_inspector = inspector; }
     void updateFullInspector();
 

@@ -35,4 +35,14 @@ FullInspector::~FullInspector()
 {
     delete m_ui;
 }
+
+void FullInspector::updateInspector(QStringList ids)
+{
+    m_ui->ids->clear();
+
+    for (auto id : ids) {
+        m_ui->ids->addItem(id);
+    }
+}
+
 }

@@ -21,6 +21,7 @@
 #include <QtConcurrent>
 #include <QFutureWatcher>
 #include <QMessageBox>
+#include <QStringList>
 
 #include "basegraphgl.h"
 #include "ui_basegraphgl.h"
@@ -385,9 +386,13 @@ void BaseGraphGL::mouseReleaseEvent(QMouseEvent *e)
             Node prevSelection = selectedNode();
             const Node& node = selectNode(e->localPos(), m_bCenter->isChecked());
             const Node& nodeCur = selectNode(m_posEntered, m_bCenter->isChecked());
-            if (!nodeCur.isNull() && !e->modifiers().testFlag(Qt::ControlModifier)) {
-                updateFullInspector();
+            if (e->pos() == m_posEntered) {
+                if (!e->modifiers().testFlag(Qt::ControlModifier)) {
+                    clearSelection();
+                    selectNode(e->localPos(), m_bCenter->isChecked());
+                }
                 m_bCenter->isChecked() ? updateCache() : update();
+                updateFullInspector();
             } else {
                 m_origin += (e->pos() - m_posEntered);
                 clearSelection();
@@ -410,7 +415,19 @@ void BaseGraphGL::mouseReleaseEvent(QMouseEvent *e)
 
 void BaseGraphGL::updateFullInspector()
 {
-    //m_inspector->show();
+    if (m_selectedNodes.size() == 0) {
+        m_inspector->hide();
+        return;
+    }
+
+    m_inspector->show();
+    QStringList ids;
+
+    std::map<int, Node>::iterator it;
+    for (it = m_selectedNodes.begin(); it != m_selectedNodes.end(); it++) {
+        ids << QString::number(it->second.id());
+    }
+    m_inspector->updateInspector(ids);
 }
 
 void BaseGraphGL::keyPressEvent(QKeyEvent* e)
