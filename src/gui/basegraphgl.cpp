@@ -375,7 +375,7 @@ void BaseGraphGL::mouseReleaseEvent(QMouseEvent *e)
                     clearSelection();
                 }
                 selectNode(e->localPos(), m_bCenter->isChecked());
-                if (!node.isNull() && !fNodeSelected) {
+                if (!node.isNull() && (!fNodeSelected || !e->modifiers().testFlag(Qt::ControlModifier))) {
                         emit(nodeSelected(node));
                 }
                 m_bCenter->isChecked() ? updateCache() : update();

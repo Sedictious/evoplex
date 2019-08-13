@@ -48,6 +48,8 @@ private:
         QRectF rect;
     };
     std::vector<Cell> m_cache;
+
+    std::map<int, Cell> m_selectedCells;
     std::map<int, Node> m_selectedNodes;
     Cell m_selectedCell;
 
@@ -62,8 +64,10 @@ inline Node GridView::selectedNode() const
 inline QPointF GridView::selectedNodePos() const
 { return m_selectedCell.rect.center() + m_origin; }
 
-inline void GridView::clearSelection()
-{ m_selectedCell = Cell(); BaseGraphGL::clearSelection(); }
+inline void GridView::clearSelection() { 
+    m_selectedCell = Cell(); BaseGraphGL::clearSelection(); 
+    m_selectedCells.clear();
+}
 
 inline QRectF GridView::cellRect(const Node& n, double length) const 
 { return QRectF(n.x() * length, n.y() * length, length, length); }

@@ -75,8 +75,8 @@ private:
     };
     std::vector<Star> m_cache;
     Star m_lastSelectedStar;
-    std::vector<Star> m_selectedStars;
 
+    std::map<int, Star> m_selectedStars;
     std::map<int, Node> m_selectedNodes;
     Star createStar(const Node& node, const qreal& edgeSizeRate, const QPointF& xy);
 
@@ -84,7 +84,7 @@ private:
     void drawEdges(QPainter& painter) const;
     void drawNodes(QPainter& painter, double nodeRadius) const;
     void drawSelectedEdge(QPainter& painter, double nodeRadius) const;
-    void drawSelectedStar(QPainter& painter, double nodeRadius) const;
+    void drawSelectedStars(QPainter& painter, double nodeRadius) const;
 
     inline qreal currEdgeSize() const;
     inline QPointF nodePoint(const Node& node, const qreal& edgeSizeRate) const;
@@ -101,6 +101,7 @@ inline void GraphView::clearSelection()
     m_lastSelectedStar = Star();
     BaseGraphGL::clearSelection();
     m_selectedNodes.clear();
+    m_selectedStars.clear();
 }
 
 inline void GraphView::zoomIn()
