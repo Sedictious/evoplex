@@ -34,11 +34,13 @@ public:
 protected:
     void paintFrame(QPainter& painter) const override;
     Node selectNode(const QPointF& pos, bool center) override;
+    Node findNode(const QPointF& pos) const override;
     bool selectNode(const Node& node, bool center) override;
     Node selectedNode() const override;
     inline QPointF selectedNodePos() const override;
     void clearSelection() override;
     CacheStatus refreshCache() override;
+    inline bool inSelectedNodes(Node node) const override;
 
 private:
     struct Cell {
@@ -46,6 +48,7 @@ private:
         QRectF rect;
     };
     std::vector<Cell> m_cache;
+    std::map<int, Node> m_selectedNodes;
     Cell m_selectedCell;
 
     void drawCell(QPainter& painter, const Cell& cell) const;
@@ -62,9 +65,11 @@ inline QPointF GridView::selectedNodePos() const
 inline void GridView::clearSelection()
 { m_selectedCell = Cell(); BaseGraphGL::clearSelection(); }
 
-inline QRectF GridView::cellRect(const Node& n, double length) const {
-    return QRectF(n.x() * length, n.y() * length, length, length);
-}
+inline QRectF GridView::cellRect(const Node& n, double length) const 
+{ return QRectF(n.x() * length, n.y() * length, length, length); }
+
+inline bool GridView::inSelectedNodes(Node node) const
+{ return m_selectedNodes.count(node.id()) != 0; }
 
 } // evoplex
 #endif // GRIDVIEW_H

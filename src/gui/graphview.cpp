@@ -31,7 +31,6 @@ namespace evoplex {
 GraphView::GraphView(QWidget* parent)
     : BaseGraphGL(parent),
       m_edgeAttr(-1),
-      m_maxSelectedNodes(2),
       m_edgeCMap(nullptr),
       m_edgeScale(25.),
       m_edgePen(Qt::gray),
@@ -102,9 +101,8 @@ CacheStatus GraphView::refreshCache()
     return CacheStatus::Ready;
 }
 
-Node GraphView::selectNode(const QPointF& pos, bool center)
+Node GraphView::findNode(const QPointF& pos) const
 {
-    m_selectedStar = Star();
     if (m_cacheStatus != CacheStatus::Ready) {
         return Node();
     }
@@ -116,11 +114,30 @@ Node GraphView::selectNode(const QPointF& pos, bool center)
             p.y() > star.xy.y()-m_nodeRadius &&
             p.y() < star.xy.y()+m_nodeRadius)
         {
-            m_selectedStar = star;
+            return star.node;
+        }
+    }
+    return Node();
+}
+
+Node GraphView::selectNode(const QPointF& pos, bool center)
+{
+    m_lastSelectedStar = Star();
+    if (m_cacheStatus != CacheStatus::Ready) {
+        return Node();
+    }
+
+    const QPointF p = pos - m_origin;
+    for (const Star& star : m_cache) {
+        if (p.x() > star.xy.x()-m_nodeRadius &&
+            p.x() < star.xy.x()+m_nodeRadius &&
+            p.y() > star.xy.y()-m_nodeRadius &&
+            p.y() < star.xy.y()+m_nodeRadius)
+        {
+            m_lastSelectedStar = star;
             if (center) { m_origin = rect().center() - star.xy; }
-            if (m_selectedNodes.size() < m_maxSelectedNodes) {
-                m_selectedNodes.insert(std::make_pair(star.node.id(), star.node));
-            }
+            m_selectedNodes.insert(std::make_pair(star.node.id(), star.node));
+            m_selectedStars.push_back(m_lastSelectedStar);
             return star.node;
         }
     }
@@ -129,7 +146,7 @@ Node GraphView::selectNode(const QPointF& pos, bool center)
 
 bool GraphView::selectNode(const Node& node, bool center)
 {
-    m_selectedStar = Star();
+    m_lastSelectedStar = Star();
     if (m_cacheStatus != CacheStatus::Ready) {
         return false;
     }
@@ -137,14 +154,14 @@ bool GraphView::selectNode(const Node& node, bool center)
     const QPointF p = nodePoint(node, currEdgeSize());
     for (const Star& star : m_cache) {
         if (star.xy == p) {
-            m_selectedStar = star;
+            m_lastSelectedStar = star;
             if (center) { m_origin = rect().center() - p; }
             return true;
         }
     }
 
-    m_selectedStar = createStar(node, currEdgeSize(), p);
-    m_origin = rect().center() - m_selectedStar.xy;
+    m_lastSelectedStar = createStar(node, currEdgeSize(), p);
+    m_origin = rect().center() - m_lastSelectedStar.xy;
     updateCache();
     return true;
 }
@@ -301,27 +318,27 @@ void GraphView::drawSelectedStar(QPainter& painter, double nodeRadius) const
     // draw shadow of the seleted node
     painter.save();
     double shadowRadius = nodeRadius*1.5;
-    QRadialGradient r(m_selectedStar.xy, shadowRadius, m_selectedStar.xy);
+    QRadialGradient r(m_lastSelectedStar.xy, shadowRadius, m_lastSelectedStar.xy);
     r.setColorAt(0, Qt::black);
     r.setColorAt(1, m_background.color());
     painter.setBrush(r);
     painter.setPen(Qt::transparent);
-    painter.drawEllipse(m_selectedStar.xy, shadowRadius, shadowRadius);
+    painter.drawEllipse(m_lastSelectedStar.xy, shadowRadius, shadowRadius);
     painter.restore();
 
     painter.save();
     // highlight immediate edges
     painter.setPen(QPen(Qt::darkGray, m_edgePen.width() + 3));
-    for (auto const& ep : m_selectedStar.edges) {
+    for (auto const& ep : m_lastSelectedStar.edges) {
         painter.drawLine(ep.second);
     }
 
     // draw selected node
     painter.setPen(m_nodePen);
-    drawNode(painter, m_selectedStar, nodeRadius);
+    drawNode(painter, m_lastSelectedStar, nodeRadius);
 
     // draw neighbours
-    const Edges& oe = m_selectedStar.node.outEdges();
+    const Edges& oe = m_lastSelectedStar.node.outEdges();
     const double esize = currEdgeSize();
     for (auto const& e : oe) {
         const Node& n = e.second.neighbour();

@@ -98,6 +98,21 @@ void GridView::paintFrame(QPainter& painter) const
     }
 }
 
+Node GridView::findNode(const QPointF& pos) const
+{
+    if (m_cacheStatus != CacheStatus::Ready) {
+        return Node();
+    }
+
+    const QPointF p = pos - m_origin;
+    for (const Cell& cell : m_cache) {
+        if (cell.rect.contains(p)) {
+            return cell.node;
+        }
+    }
+    return Node();
+}
+
 Node GridView::selectNode(const QPointF& pos, bool center)
 {
     m_selectedCell = Cell();

@@ -40,19 +40,20 @@ public slots:
 
 protected:
     void paintFrame(QPainter& painter) const override;
+    Node findNode(const QPointF& pos) const override;
     Node selectNode(const QPointF &pos, bool center) override;
     bool selectNode(const Node& node, bool center) override;
     inline Node selectedNode() const override;
     inline QPointF selectedNodePos() const override;
     inline void clearSelection() override;
     CacheStatus refreshCache() override;
+    inline bool inSelectedNodes(Node node) const override;
 
 private slots:
     void setEdgeCMap(ColorMap* cmap);
 
 private:
     int m_edgeAttr;
-    const int m_maxSelectedNodes;
 
     ColorMap* m_edgeCMap;
     qreal m_edgeScale;
@@ -73,7 +74,8 @@ private:
             : node(n), xy(xy), edges(e) {}
     };
     std::vector<Star> m_cache;
-    Star m_selectedStar;
+    Star m_lastSelectedStar;
+    std::vector<Star> m_selectedStars;
 
     std::map<int, Node> m_selectedNodes;
     Star createStar(const Node& node, const qreal& edgeSizeRate, const QPointF& xy);
@@ -89,14 +91,14 @@ private:
 };
 
 inline Node GraphView::selectedNode() const
-{ return m_selectedStar.node; }
+{ return m_lastSelectedStar.node; }
 
 inline QPointF GraphView::selectedNodePos() const
-{ return m_selectedStar.xy + m_origin; }
+{ return m_lastSelectedStar.xy + m_origin; }
 
 inline void GraphView::clearSelection()
 {
-    m_selectedStar = Star();
+    m_lastSelectedStar = Star();
     BaseGraphGL::clearSelection();
     m_selectedNodes.clear();
 }
@@ -114,6 +116,9 @@ inline QPointF GraphView::nodePoint(const Node& node, const qreal& edgeSizeRate)
 {
     return QPointF(edgeSizeRate * node.x(), edgeSizeRate * node.y());
 }
+
+inline bool GraphView::inSelectedNodes(Node node) const
+{ return m_selectedNodes.count(node.id()) != 0; }
 
 } // evoplex
 #endif // GRAPHVIEW_H
